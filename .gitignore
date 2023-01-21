@@ -1,0 +1,7 @@
+*.avi
+
+__pycache__
+
+.vscode
+
+notes_for_mathias.txt

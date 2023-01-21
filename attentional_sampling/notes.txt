@@ -1,0 +1,10 @@
+implementation of the paper ACTIVE ATTENTIONAL SAMPLING 
+`https://sci-hub.se/10.1109/cvpr.2012.6247914`
+
+in utils:
+    - add vizualisation tools
+    - create classes for different sampling method
+
+
+je dois aussi avoir une background subtraction method pour calculer le masque
+pourquoi pas utiliser celui de opencv and ayant une vision future pour VPI de NVIDIA
