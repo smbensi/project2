@@ -2,7 +2,7 @@ from scipy.signal import convolve2d
 import numpy as np
 import cv2
 
-# TODO : create a new class to keep the spatial and temporal properties
+#  : create a new class to keep the spatial and temporal properties
 # In the original paper they defined these params:
 # alpha_t = 0.1
 # alpha_f = 0.01

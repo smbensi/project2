@@ -2,13 +2,17 @@ import numpy as np
 import cv2
 import MCDWrapper
 
+
+from bg_sub.utils.active_samp.sampling_map_gen import FgMap, ActiveSamplingMask
+
 import time
 # import active_sampling.rand_scattered_samp as active_sampling
 # import active_sampling.fg_prob_map as fg_map
 
 
 np.set_printoptions(precision=2, suppress=True)
-cap = cv2.VideoCapture('python/new_vid/20210104_123240_0.mp4')
+# cap = cv2.VideoCapture('python/new_vid/20210104_123240_0.mp4')
+cap = cv2.VideoCapture('woman.mp4')
 mcd = MCDWrapper.MCDWrapper()
 isFirst = True
 
@@ -28,9 +32,13 @@ while(cap.isOpened()):
     mask = np.zeros(gray.shape, np.uint8)
     if (isFirst):
         mcd.init(gray)
+        fg_map = FgMap(gray)
+        active_mask = ActiveSamplingMask(gray)
         isFirst = False
     else:
         mask = mcd.run(gray)
+        mapp = fg_map.calc_fg_map(gray, mask)
+        maskk = active_mask.calc_sampling_mask(gray,mask, mapp)
     frame[mask > 0, 2] = 255
     # if not isFirst:
         # foreground_probability_map.loop(frame, mask)

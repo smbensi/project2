@@ -47,13 +47,22 @@ class DualGM:
 
     def update_mean(self):
         lr = self.age_comp/(self.age_comp + 1)
-        M_t = self.calc_M_t
+        M_t = self.calc_M_t()
         self.mean = lr * self.mean_comp + (1-lr) * M_t
     
     def update_var(self):
         lr = self.age_comp/(self.age_comp + 1)
-        V_t = self.calc_V_t
+        V_t = self.calc_V_t()
         self.var = lr * self.var_comp + (1-lr) * V_t
     
     def update_age(self):
         self.age = self.age_comp + 1
+
+
+if __name__ == "__main__":
+    frame = np.ones((9,9))
+
+    model = DualGM(frame)
+    model.update_mean()
+    model.update_var()
+    model.update_age()

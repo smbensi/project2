@@ -511,7 +511,7 @@ class ProbModel {
 		}
 		for (int bIdx_j = 0; bIdx_j < curModelHeight; bIdx_j++) {
 			for (int bIdx_i = 0; bIdx_i < curModelWidth; bIdx_i++) {
-				// TODO: OPTIMIZE THIS PART SO THAT WE DO NOT CALCULATE THIS (LUT)
+				// TO DO: OPTIMIZE THIS PART SO THAT WE DO NOT CALCULATE THIS (LUT)
 				// base (i,j) for this block
 				int idx_base_i;
 				int idx_base_j;

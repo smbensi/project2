@@ -72,7 +72,7 @@ void
 
 	detect_img = cvCreateImage(cvSize(in_imgIpl->width, in_imgIpl->height), IPL_DEPTH_8U, 1);
 
-	//TODO directly retrieve imgIpl (change to Mat later)
+	//TO DO directly retrieve imgIpl (change to Mat later)
 
 	// Smoothing using median filter
 	cvCvtColor(imgIpl, imgIplTemp, CV_RGB2GRAY);

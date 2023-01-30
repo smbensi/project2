@@ -7,7 +7,7 @@ def rand_mask(img,mask,phi=0.05):
     it samples the previous foreground pixel from previous frame 
        
     """
-    # TODO : find a nice way to sample pixels other than previous frame
+    #  : find a nice way to sample pixels other than previous frame
      
     nb_of_pixels = img.size
     pix_to_samp  = int(phi*nb_of_pixels)

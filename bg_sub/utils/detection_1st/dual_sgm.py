@@ -21,7 +21,7 @@ class SGM:
         self.thresh_v = params.THETA_V # 50x50 threshold for decaying age
         self.thresh_detection = params.THETA_D # threshold for determining detection
 
-        # TODO peut etre que je dois definir une matrice de grid parce quelles sembles indeps
+        # FIXME peut etre que je dois definir une matrice de grid parce quelles sembles indeps
         self.apparent = 0
         self.candidate = 1 
         self.model_to_update = None
@@ -44,7 +44,7 @@ class SGM:
         return V_t
 
     def check_age_after_update(self):
-        # TODO elle a un probleme cette fonction 
+        # FIXME elle a un probleme cette fonction 
         change_age = (self.age[self.candidate] > self.age[self.apparent]).astype(int)
         change_age[change_age==1] = self.candidate
 
@@ -59,7 +59,7 @@ class SGM:
             self.model_to_update = model_candidate
         else:
             # FIXME checker que cest bien ca l'initialisation
-            # TODO bien checker est ce quild est possible quon ait un model different par grid
+            # FIXME bien checker est ce quild est possible quon ait un model different par grid
             self.mean[model_candidate] = M_t
             self.variance[model_candidate] = self.calc_V_t
             if self.age[model_candidate] > self.age[model]:

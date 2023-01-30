@@ -21,13 +21,13 @@ class SGM:
         self.thresh_v = 50 # 50x50 threshold for decaying age
         self.thresh_detection = 4 # threshold for determining detection
 
-        # TODO peut etre que je dois definir une matrice de grid parce quelles sembles indeps
+        # FIXME peut etre que je dois definir une matrice de grid parce quelles sembles indeps
         self.apparent = 0
         self.candidate = 1 
         self.model_to_update = None
 
     def check_age_after_update(self):
-        # TODO elle a un probleme cette fonction 
+        # FIXME elle a un probleme cette fonction 
         change_age = (self.age[self.candidate] > self.age[self.apparent]).astype(int)
         change_age[change_age==1] = self.candidate
 
@@ -43,14 +43,14 @@ class SGM:
         elif cond1 == True:
             self.model_to_update = self.apparent
         else:
-            # TODO initialize the candidate with the current observation
+            # FIXME initialize the candidate with the current observation
             pass
 
     def update_mean(self,frame):
         coef = self.age/(self.age + 1)
         
         kernel = np.ones((self.grid,self.grid))
-        global M_t  # TODO regarder si ca pose pas de problemes vu qu'utiliser ailleurs
+        global M_t  # FIXME regarder si ca pose pas de problemes vu qu'utiliser ailleurs
         M_t = correlate2d(frame,kernel,mode="valid")
         M_t = (1/self.grid**2)*M_t[::self.grid,::self.grid]
         self.mean = coef * self.mean + (1-coef)*M_t

@@ -40,7 +40,6 @@ class MotionComp:
 
     def calc_klt(self):
       # Use KLT feature tracker to track corners in each grid
-      # TODO jusqua 19h30
       # en fait j'ai rien compris les corners c'est plus les edges dans chaque grid
       # donc on va surement aller chercher les goodFeaturesToTrack
       # divide the input image at time t into 32x24 grids and perform KLT

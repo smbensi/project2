@@ -1,3 +1,5 @@
+import math
+
 GRID_SIZE=4
 NUM_MODELS = 2
 
@@ -16,3 +18,16 @@ DEBUG = True
 
 # FIXME voir comment on definit autrement un objet global
 DUAL_SGM = None
+
+### ************************
+# PARAMS FOR ACTIVE SAMPLING
+### ************************
+# TO COMPUTE THE FOREGROUND PROBABILITY MAP
+ALPHA_T = 0.1
+ALPHA_S = 0.05
+OMEGA = 5
+ALPHA_F = 0.01
+
+# TO COMPUTE THE ACTIVE SAMPLING MASK
+PHI = 0.05
+K_SEI = math.sqrt(3)
