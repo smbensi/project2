@@ -24,6 +24,8 @@ height = int(cap.get(4))
 
 while(cap.isOpened()):
     ret, frame = cap.read()
+    if ret == False:
+        break
     gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
     
     # if not isFirst:
@@ -37,8 +39,10 @@ while(cap.isOpened()):
         isFirst = False
     else:
         mask = mcd.run(gray)
-        mapp = fg_map.calc_fg_map(gray, mask)
-        maskk = active_mask.calc_sampling_mask(gray,mask, mapp)
+        mask_normalized = mask/255
+        mapp = fg_map.calc_fg_map(gray, mask_normalized)
+        maskk = active_mask.calc_sampling_mask(gray,mask_normalized, mapp)
+        # mask2 = active_mask.calc_spatially_expanding_importance_sampling()
     frame[mask > 0, 2] = 255
     # if not isFirst:
         # foreground_probability_map.loop(frame, mask)
@@ -48,10 +52,10 @@ while(cap.isOpened()):
     if cv2.waitKey(10) & 0xFF == ord('q'):
         break
     frNb +=1
-    if frNb == 170:
-        break
+    # if frNb == 170:
+    #     break
     time.sleep(0.01)
-    
+print(f"nb of frames: {frNb}")
 cap.release()
 # out.release()
 

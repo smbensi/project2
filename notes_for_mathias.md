@@ -1,5 +1,8 @@
 # Project2
+```math
+SE = \frac{\sigma}{\sqrt{n}}
 
+```
 ## Principal idea
 
 > Create a background subtraction model to detect moving object from background in non
@@ -26,3 +29,11 @@ TO DO
 * creer des visualisations pour les masques qu'on cree
 
 DONE
+
+09/02
+
+15 min pour creer des visualitions des masques de spatially expanding importance sampling. Bien comprendre l'idee derriere
+
+# Spatially Expanding importance sampling
+
+donc sur chaque pt tq M_RS(t) == 1 , on prend le P_FG et donc tous les points dans la zone E_t(i)=round(r_t(i) x w_s)

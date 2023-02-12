@@ -122,18 +122,24 @@ class ActiveSamplingMask():
             phi% pixels of entire pixels are selected through randomly
             scattered sampling
         '''
+        
+        # TODO regarder s'il faut aussi rajouter les reuse
+        
         frame = self.frame
+        self.rand_scattered_mask = np.zeros_like(frame)
         D_t = self.detection_mask
         N = np.size(frame) # nb of pixels in frame 
         N_reuse = np.sum(D_t)
+        # TODO probleme ici
         nb_rand_samp = np.round(self.phi*N - N_reuse).astype(int)
         
-        indices = [(i,j) for i in range(frame.shape[0]) for j  in range(frame.shape[1]) 
-                            if D_t[i,j] < 0.5]
+        if nb_rand_samp > 0:
+            indices = [(i,j) for i in range(frame.shape[0]) for j  in range(frame.shape[1]) 
+                                if D_t[i,j] < 0.5]
 
-        # randomly selct pixels that are not in the detection map 
-        rand_ind = np.array(random.sample(indices,nb_rand_samp))
-        self.rand_scattered_mask[rand_ind[:,0],rand_ind[:,1]] = 1
+            # randomly select pixels that are not in the detection map 
+            rand_ind = np.array(random.sample(indices,nb_rand_samp))
+            self.rand_scattered_mask[rand_ind[:,0],rand_ind[:,1]] = 1
 
 
         if params.DEBUG:
@@ -143,12 +149,21 @@ class ActiveSamplingMask():
             cv2.imshow("random scattered sampling", debg)
             cv2.waitKey(1)
 
+
     def calc_spatially_expanding_importance_sampling(self):
         ''' 
             RS is too sparse to construct a complete fg region and might miss small
             objects. necessary to fill the space between sparse points in the fg region
+            
+            M_t_SEI = S_t_SEI(M_t_RS,P_t-1_FG)
+            
+            The importance weight of each randomly scattered sample i becomes r_t(i) = P_FG(i)
+            Proportional to r_t(i) we expand the sampling region N(i) with size of E_t(i) x E_t(i)
+            
         '''
         frame = self.frame
+        self.spatial_exp_imp_mask = np.zeros_like(frame)
+        
         P_FG = self.fg_map
         N = np.size(frame)
         Ns = np.sum(self.rand_scattered_mask)
@@ -157,10 +172,25 @@ class ActiveSamplingMask():
             for j in range(frame.shape[1]):
                 if self.rand_scattered_mask[i,j] == 1:
                     phi_t = np.round(P_FG[i,j]*omega_s)
-                    # TODO bug ici 
-                    # TypeError: slice indices must be integers or None or have an __index__ method
-                    self.spatial_exp_imp_mask[i-phi_t:i+phi_t,j-phi_t:j+phi_t]=1
-        # TODO rajouter du debug
+                    top = (i-phi_t) if (i-phi_t) >= 0 else 0
+                    bottom = (i+phi_t) if (i+phi_t) < frame.shape[0] else frame.shape[0]-1
+                    top, bottom = int(np.round(top)), int(np.round(bottom))   
+                    left = (j-phi_t) if (j-phi_t) >= 0 else 0
+                    right = (j+phi_t) if (j+phi_t) < frame.shape[1] else frame.shape[1]-1
+                    left, right = int(np.round(left)), int(np.round(right))   
+                    
+                    self.spatial_exp_imp_mask[top:bottom,left:right]=1
+        
+        print("c'est bon")
+        
+        # visualization
+        if params.DEBUG:
+            debg = np.expand_dims(frame,axis=2)
+            debg = np.repeat(debg,3, axis=2)
+            debg[self.spatial_exp_imp_mask>0,1] = 255
+            cv2.imshow("spatially expanding importance sampling", debg)
+            cv2.waitKey(1)
+            
 
     def calc_surprise_pixel_sampling(self):
         pass
@@ -182,7 +212,6 @@ class ActiveSamplingMask():
         self.calc_rand_scattered_sampling()
         self.calc_spatially_expanding_importance_sampling()
         self.calc_surprise_pixel_sampling()
-        self.samp_mask = (self.rand_scattered_mask 
-                            or self.surprise_pix_samp_mask
-                            or self.spatial_exp_imp_mask).astype(int)
+        tmp = np.bitwise_or(self.rand_scattered_mask, self.surprise_pix_samp_mask)
+        self.samp_mask = np.bitwise_or(tmp, self.spatial_exp_imp_mask).astype(int)
         return self.samp_mask
