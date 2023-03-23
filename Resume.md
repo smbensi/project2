@@ -9,4 +9,8 @@
 
 # 1.Introduction
 
+- Finding moving objects in the scene is a funcdamental problem in the research of Computer Vision.
+- important: computational efficiency and detection accuracy 
+
+
 # 2.Conclusion

@@ -1,0 +1,6 @@
+opencv-contrib-python
+numpy
+
+# for printing in colors
+termcolor
+
